@@ -1,152 +1,85 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>그제서야보이는나의영원</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: {
-        cream: '#F2EAD9', warm: '#E8D9C0', sand: '#C9B99A',
-        bark: '#8B6F52', earth: '#5C4033', deep: '#3D2B1F', rose: '#C4856A',
-      }}}
-    }
-  </script>
-  <style>
-    @font-face {
-      font-family: 'OngleipEunbyeol';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_eunbyul21-Rg.woff2') format('woff2');
-      font-display: swap;
-    }
-    * { font-family: 'OngleipEunbyeol', sans-serif; }
-    body { background: #F2EAD9; }
-
-    .grain::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 1;
-    }
-    .fade-in { animation: fadeIn 0.4s ease forwards; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    input::placeholder { color: #C9B99A; }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: #C9B99A; border-radius: 4px; }
-
-    #search-results {
-      position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-      background: rgba(242,234,217,0.97); backdrop-filter: blur(12px);
-      border: 1px solid rgba(201,185,154,0.5); border-radius: 16px;
-      overflow-y: auto; max-height: 320px;
-      box-shadow: 0 8px 32px rgba(61,43,31,0.12); z-index: 50;
-    }
-    .result-item:not(:last-child) { border-bottom: 1px solid rgba(201,185,154,0.2); }
-    .result-item:hover { background: #E8D9C0; }
-
-    .overlay {
-      position: fixed; inset: 0;
-      background: rgba(61,43,31,0.4); backdrop-filter: blur(5px);
-      z-index: 200; display: flex; align-items: center; justify-content: center;
-    }
-    .modal-box {
-      background: #F2EAD9; border-radius: 24px; padding: 28px;
-      width: 320px; box-shadow: 0 16px 48px rgba(61,43,31,0.2);
-    }
-    .pill-btn {
-      width: 100%; padding: 10px; border-radius: 12px;
-      font-size: 14px; cursor: pointer; transition: opacity 0.15s;
-      border: none;
-    }
-    .pill-btn:hover { opacity: 0.85; }
-    .input-base {
-      width: 100%; padding: 10px 14px; border-radius: 12px;
-      font-size: 13px; outline: none; background: #E8D9C0;
-      border: 1px solid rgba(201,185,154,0.6); color: #3D2B1F;
-      transition: border-color 0.15s;
-    }
-    .input-base:focus { border-color: #8B6F52; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>hiraeth</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
-<body class="min-h-screen text-deep">
+<body>
 
-  <!-- 헤더 -->
-  <header style="background:rgba(242,234,217,0.85);backdrop-filter:blur(12px)"
-    class="fixed top-0 left-0 right-0 z-50 border-b border-sand/30 px-6 h-14 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5C4033" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
-        <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
-      </svg>
-      <span class="text-earth text-xl">MixTune</span>
-    </div>
-    <div id="header-right" class="flex items-center gap-3"></div>
-  </header>
+<header id="hdr">
+  <div id="logo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+    hiraeth
+  </div>
+  <div id="swatches"></div>
+  <div id="hdr-right"></div>
+</header>
 
-  <!-- 히어로 -->
-  <section class="relative grain overflow-hidden pt-14" style="min-height:52vh">
-    <div id="hero-bg" class="absolute inset-0"
-      style="background-size:cover;background-position:center;filter:brightness(0.5) saturate(0.8)"></div>
-    <div class="absolute inset-0" style="background:linear-gradient(to bottom,rgba(61,43,31,0.2) 0%,rgba(242,234,217,0.93) 100%)"></div>
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-16 text-center">
-      <h1 class="text-5xl sm:text-6xl text-earth leading-tight mb-5">
-        :D<br><span class="text-rose"></span>
-      </h1>
-      <p class="text-bark text-base leading-relaxed mb-10">좋아하는 노래를 검색해서 모두와 공유하세요</p>
-      <div class="relative max-w-lg mx-auto">
-        <svg class="absolute left-4 top-1/2 -translate-y-1/2 z-10" width="16" height="16"
-          viewBox="0 0 24 24" fill="none" stroke="#8B6F52" stroke-width="2" stroke-linecap="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input id="search-input" type="text" placeholder="노래 제목 또는 아티스트 검색..."
-          class="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm text-deep outline-none"
-          style="background:rgba(242,234,217,0.9);border:1px solid rgba(201,185,154,0.6)"
-          autocomplete="off" />
-        <div id="search-results" style="display:none"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 피드 -->
-  <main class="max-w-5xl mx-auto px-4 py-12">
-    <div id="users-grid" class="grid gap-8"></div>
-    <div id="no-users" class="text-center py-20">
-      <p class="text-bark/40 text-sm">아직 사용자가 없어</p>
-    </div>
-    <div id="together-section" style="display:none" class="mt-10">
-      <div class="flex items-center gap-4 mb-8">
-        <div class="h-px flex-1 bg-sand/40"></div>
-        <span class="text-bark/50 text-sm">함께 듣는 중</span>
-        <div class="h-px flex-1 bg-sand/40"></div>
-      </div>
-      <div id="feed-together" class="grid sm:grid-cols-2 gap-4"></div>
-    </div>
-  </main>
-
-  <!-- 로그인 오버레이 -->
-  <div id="login-overlay" class="overlay">
-    <div class="modal-box" style="width:340px">
-      <h3 class="text-earth text-lg mb-5" id="login-title">MixTune</h3>
-      <div id="login-body"></div>
+<section id="hero" class="grain">
+  <div class="grad"></div>
+  <div class="inner">
+    <h1>:D<br><span></span></h1>
+    <p>좋아하는 노래를 검색해서 모두와 공유하세요</p>
+    <div id="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="q" type="text" placeholder="노래 제목 또는 아티스트..." autocomplete="off"/>
+      <div id="results"></div>
     </div>
   </div>
+</section>
 
-  <!-- 사용자 추가 오버레이 -->
-  <div id="add-user-overlay" class="overlay" style="display:none" onclick="if(event.target===this)closeAddUser()">
-    <div class="modal-box">
-      <h3 class="text-earth text-lg mb-5">사용자 추가</h3>
-      <input id="new-name" type="text" placeholder="이름 또는 아이디" class="input-base mb-3" />
-      <input id="new-pin" type="password" placeholder="비밀번호 (숫자 4자리)" maxlength="4" class="input-base mb-5" />
-      <div class="flex gap-3">
-        <button onclick="confirmAddUser()" class="pill-btn text-cream" style="background:#5C4033;flex:1">추가</button>
-        <button onclick="closeAddUser()" class="pill-btn text-bark" style="border:1px solid rgba(201,185,154,0.6);flex:1;background:transparent">취소</button>
-      </div>
+<main>
+  <div class="divider"><span>오늘의 추천곡을 추가해보세요</span></div>
+  <div id="picks"></div>
+  <div id="lib">
+    <div id="lib-header">
+      <span id="lib-title">내 음악</span>
+      <button onclick="openFolder()">+ 폴더</button>
     </div>
+    <div id="folders"></div>
+    <div id="feed"></div>
   </div>
+</main>
 
-  <script type="module" src="/src/main.js"></script>
+<!-- 로그인 -->
+<div class="overlay" id="ov-login" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal"><h3 id="login-title">로그인</h3><div id="login-body"></div></div>
+</div>
+
+<!-- 사용자 추가 -->
+<div class="overlay" id="ov-user" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <h3>사용자 추가</h3>
+    <input class="inp" id="un" type="text" placeholder="이름 또는 아이디" onkeydown="if(event.key==='Enter')document.getElementById('up').focus()"/>
+    <p style="font-size:12px;color:var(--s);margin-bottom:8px">프로필 색상</p>
+    <div id="up-colors" style="margin-bottom:10px"></div>
+    <input class="inp" id="up" type="password" placeholder="비밀번호" maxlength="20" onkeydown="if(event.key==='Enter')addUser()"/>
+    <button class="btn-p" onclick="addUser()">추가</button>
+    <button class="btn-g" onclick="hide('ov-user')">취소</button>
+  </div>
+</div>
+
+<!-- 폴더 -->
+<div class="overlay" id="ov-folder" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <h3>새 폴더</h3>
+    <input class="inp" id="fn" type="text" placeholder="폴더 이름"/>
+    <button class="btn-p" onclick="mkFolder()">만들기</button>
+    <button class="btn-g" onclick="hide('ov-folder')">취소</button>
+  </div>
+</div>
+
+<!-- 트랙 옵션 -->
+<div class="overlay" id="ov-track" onclick="if(event.target===this)hide('ov-track')">
+  <div class="modal">
+    <p id="opt-name" style="font-size:14px;color:var(--t);font-weight:500;margin-bottom:3px"></p>
+    <p id="opt-artist" style="font-size:12px;color:var(--s);margin-bottom:18px"></p>
+    <div id="opt-actions"></div>
+  </div>
+</div>
+
+<script src="main.js"></script>
 </body>
 </html>
