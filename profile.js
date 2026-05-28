@@ -47,6 +47,7 @@ async function hashPin(pin, salt) {
 
 let db   = JSON.parse(localStorage.getItem('mt') || '{"users":[],"lib":{}}')
 const save = () => localStorage.setItem('mt', JSON.stringify(db))
+const sync = () => { save(); remotePut(db) }
 const uid  = localStorage.getItem('mt_uid')
 const me   = () => db.users.find(u => u.id === uid) || null
 const esc  = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
@@ -56,14 +57,9 @@ function toast(msg) {
   document.body.appendChild(el); setTimeout(()=>el.remove(),2200)
 }
 
-const params   = new URLSearchParams(location.search)
-const targetId = params.get('id') || uid
-if (!targetId) location.href = 'index.html'
-const target = db.users.find(u => u.id === targetId)
-if (!target) location.href = 'index.html'
-
+let targetId, target
 let isEditing   = false
-let pendingColor = target?.color || COLORS[0]
+let pendingColor = COLORS[0]
 let _artistResults = [], _songResults = []
 let artistTimer = null, songTimer = null
 
@@ -326,17 +322,27 @@ function saveProfile() {
   db.users[i].insta      = document.getElementById('p-insta').value.trim()
   db.users[i].playlist   = document.getElementById('p-playlist').value.trim()
   Object.assign(target, db.users[i])
-  save(); isEditing = false; renderPage(); toast('저장됐어')
+  sync(); isEditing = false; renderPage(); toast('저장됐어')
 }
 
 function deleteUser() {
   if (!me()?.isAdmin || target.isAdmin) return
   if (!confirm(`"${target.name}" 계정을 삭제할까요?`)) return
   db.users = db.users.filter(u => u.id !== targetId)
-  delete db.lib[targetId]; save(); location.href = 'index.html'
+  delete db.lib[targetId]; sync(); location.href = 'index.html'
 }
 
-applyTheme(curPal)
-renderSwatches()
-renderHeader()
-renderPage()
+;(async () => {
+  const remote = await remoteGet()
+  if (remote) { db = mergeDb(db, remote, uid); save() }
+  const params = new URLSearchParams(location.search)
+  targetId = params.get('id') || uid
+  if (!targetId) { location.href = 'index.html'; return }
+  target = db.users.find(u => u.id === targetId)
+  if (!target) { location.href = 'index.html'; return }
+  pendingColor = target.color || COLORS[0]
+  applyTheme(curPal)
+  renderSwatches()
+  renderHeader()
+  renderPage()
+})()

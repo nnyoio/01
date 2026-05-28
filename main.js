@@ -40,7 +40,6 @@ async function hashPin(pin, salt) {
   if (!pin) return ''
   const enc = new TextEncoder()
   if (!salt) {
-    // 레거시 폴백: 솔트 없는 구버전 계정용
     const buf = await crypto.subtle.digest('SHA-256', enc.encode(pin))
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('')
   }
@@ -80,14 +79,15 @@ function openAddUser() {
 let db = JSON.parse(localStorage.getItem('mt') || '{"users":[],"lib":{}}')
 let uid = localStorage.getItem('mt_uid') || null, fid = 'all', pending = null
 
-const save       = () => localStorage.setItem('mt', JSON.stringify(db))
-const saveUid    = () => uid ? localStorage.setItem('mt_uid', uid) : localStorage.removeItem('mt_uid')
-const me         = () => db.users.find(u => u.id === uid) || null
-const myLib      = () => db.lib[uid] || {folders:[], tracks:[]}
-const bigArt     = u => u?.replace('100x100bb','600x600bb') || ''
-const spotUrl    = t => `https://open.spotify.com/search/${encodeURIComponent(t.trackName+' '+t.artistName)}`
-const hide       = id => document.getElementById(id).classList.remove('show')
-const show       = id => document.getElementById(id).classList.add('show')
+const save    = () => localStorage.setItem('mt', JSON.stringify(db))
+const sync    = () => { save(); remotePut(db) }
+const saveUid = () => uid ? localStorage.setItem('mt_uid', uid) : localStorage.removeItem('mt_uid')
+const me      = () => db.users.find(u => u.id === uid) || null
+const myLib   = () => db.lib[uid] || {folders:[], tracks:[]}
+const bigArt  = u => u?.replace('100x100bb','600x600bb') || ''
+const spotUrl = t => `https://open.spotify.com/search/${encodeURIComponent(t.trackName+' '+t.artistName)}`
+const hide    = id => document.getElementById(id).classList.remove('show')
+const show    = id => document.getElementById(id).classList.add('show')
 const nameExists = name => db.users.some(u => u.name === name)
 
 function toast(msg) {
@@ -97,7 +97,6 @@ function toast(msg) {
 
 // ── 관리자 계정 초기화 ─────────────────────────────────
 async function initAdmin() {
-  // 솔트 없는 구버전 관리자 계정이면 삭제 후 재생성
   const old = db.users.find(u => u.id === 'admin')
   if (old && !old.salt) db.users = db.users.filter(u => u.id !== 'admin')
   if (db.users.some(u => u.id === 'admin')) return
@@ -110,7 +109,7 @@ async function initAdmin() {
   }
   db.users.unshift(admin)
   db.lib['admin'] = db.lib['admin'] || {folders:[], tracks:[]}
-  save()
+  sync()
 }
 
 // ── 검색 ──────────────────────────────────────────────
@@ -150,19 +149,19 @@ function pickTrack(id) {
 function setTodayPick() {
   const i = db.users.findIndex(u => u.id===uid)
   db.users[i].todayPick = db.users[i].todayPick?.trackId===pending.trackId ? null : pending
-  save(); hide('ov-track'); renderPicks(); qEl.value = ''
+  sync(); hide('ov-track'); renderPicks(); qEl.value = ''
 }
 
 function addTo(folderId) {
   if (!db.lib[uid]) db.lib[uid] = {folders:[], tracks:[]}
   if (!db.lib[uid].tracks.some(t => t.trackId===pending.trackId && t.folderId===folderId)) {
-    db.lib[uid].tracks.unshift({...pending, folderId, addedAt:Date.now()}); save(); renderLib()
+    db.lib[uid].tracks.unshift({...pending, folderId, addedAt:Date.now()}); sync(); renderLib()
   }
   hide('ov-track'); qEl.value = ''
 }
 
 function removeTrack(trackId, folderId) {
-  db.lib[uid].tracks = db.lib[uid].tracks.filter(t => !(t.trackId===trackId && t.folderId===folderId)); save(); renderLib()
+  db.lib[uid].tracks = db.lib[uid].tracks.filter(t => !(t.trackId===trackId && t.folderId===folderId)); sync(); renderLib()
 }
 
 // ── 렌더 ──────────────────────────────────────────────
@@ -213,7 +212,7 @@ function delFolder(id) {
   const lib = db.lib[uid]
   lib.folders = lib.folders.filter(f => f.id!==id)
   lib.tracks  = lib.tracks.filter(t => t.folderId!==id)
-  fid = 'all'; save(); renderLib()
+  fid = 'all'; sync(); renderLib()
 }
 function renderAll() { renderPicks(); renderLib() }
 
@@ -275,7 +274,7 @@ function showLogin() {
     const salt = genSalt()
     const pin  = await hashPin(document.getElementById('cpin').value.trim(), salt)
     const u = {id:Date.now()+'', name, pin, salt, bio:'', insta:'', artist:'', song:'', playlist:'', color:pendingColor, todayPick:null}
-    db.users.push(u); db.lib[u.id]={folders:[],tracks:[]}; save()
+    db.users.push(u); db.lib[u.id]={folders:[],tracks:[]}; sync()
     uid=u.id; saveUid(); hide('ov-login'); fid='all'; renderHeader(); renderAll()
   }
 }
@@ -287,7 +286,7 @@ async function addUser() {
   const salt = genSalt()
   const pin  = await hashPin(document.getElementById('up').value.trim(), salt)
   const u = {id:Date.now()+'', name, pin, salt, bio:'', insta:'', artist:'', song:'', playlist:'', color:pendingColor, todayPick:null}
-  db.users.push(u); db.lib[u.id]={folders:[],tracks:[]}; save()
+  db.users.push(u); db.lib[u.id]={folders:[],tracks:[]}; sync()
   document.getElementById('un').value=''; document.getElementById('up').value=''; hide('ov-user'); renderPicks()
 }
 
@@ -298,16 +297,26 @@ function openFolder() { show('ov-folder'); document.getElementById('fn').value='
 function mkFolder() {
   const name = document.getElementById('fn').value.trim(); if (!name||!uid) return
   if (!db.lib[uid]) db.lib[uid] = {folders:[], tracks:[]}
-  db.lib[uid].folders.push({id:Date.now()+'', name}); save(); hide('ov-folder'); renderLib()
+  db.lib[uid].folders.push({id:Date.now()+'', name}); sync(); hide('ov-folder'); renderLib()
 }
 document.getElementById('fn').addEventListener('keydown', e => e.key==='Enter' && mkFolder())
 
 // ── 초기화 ────────────────────────────────────────────
 ;(async () => {
+  const remote = await remoteGet()
+  if (remote) { db = mergeDb(db, remote, uid); save() }
   await initAdmin()
   if (uid && !db.users.find(u => u.id===uid)) { uid=null; saveUid() }
   applyTheme(curPal)
   renderSwatches()
   renderHeader()
   renderAll()
+  setInterval(async () => {
+    if (document.hidden) return
+    const r = await remoteGet()
+    if (!r) return
+    db = mergeDb(db, r, uid)
+    save()
+    renderAll(); renderHeader()
+  }, 30000)
 })()

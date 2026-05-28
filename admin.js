@@ -41,6 +41,7 @@ async function hashPin(pin, salt) {
 
 let db = JSON.parse(localStorage.getItem('mt') || '{"users":[],"lib":{}}')
 const save = () => localStorage.setItem('mt', JSON.stringify(db))
+const sync = () => { save(); remotePut(db) }
 const uid  = localStorage.getItem('mt_uid')
 const me   = () => db.users.find(u => u.id === uid) || null
 const esc  = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
@@ -143,7 +144,7 @@ function saveEdit(userId) {
   db.users[i].artist   = document.getElementById(`ef-artist-${userId}`).value.trim()
   db.users[i].song     = document.getElementById(`ef-song-${userId}`).value.trim()
   db.users[i].playlist = document.getElementById(`ef-playlist-${userId}`).value.trim()
-  save(); closeAllForms()
+  sync(); closeAllForms()
   const bioEl = document.querySelector(`#acard-${userId} .admin-user-bio`)
   if (bioEl) bioEl.textContent = db.users[i].bio
   else if (db.users[i].bio) {
@@ -160,14 +161,14 @@ async function savePw(userId) {
   const salt = genSalt()
   db.users[i].pin  = await hashPin(raw, salt)
   db.users[i].salt = salt
-  save(); closeAllForms(); toast(`${db.users[i].name} 비밀번호 재설정 완료`)
+  sync(); closeAllForms(); toast(`${db.users[i].name} 비밀번호 재설정 완료`)
 }
 
 function deleteUser(userId) {
   const u = db.users.find(u => u.id === userId); if (!u || u.isAdmin) return
   if (!confirm(`"${u.name}" 계정을 삭제할까요?`)) return
   db.users = db.users.filter(u => u.id !== userId)
-  delete db.lib[userId]; save()
+  delete db.lib[userId]; sync()
   document.getElementById(`acard-${userId}`)?.remove()
   toast(`${u.name} 계정 삭제됨`)
   const totalTracks = Object.values(db.lib).reduce((a,l)=>a+l.tracks.length,0)
@@ -177,9 +178,12 @@ function deleteUser(userId) {
      <div class="admin-stat"><b>${db.users.filter(u=>u.todayPick).length}</b>오늘의 추천</div>`
 }
 
-if (!me()?.isAdmin) location.href = 'index.html'
-
-applyTheme(curPal)
-renderSwatches()
-renderHeader()
-renderPage()
+;(async () => {
+  const remote = await remoteGet()
+  if (remote) { db = mergeDb(db, remote, uid); save() }
+  if (!me()?.isAdmin) { location.href = 'index.html'; return }
+  applyTheme(curPal)
+  renderSwatches()
+  renderHeader()
+  renderPage()
+})()
