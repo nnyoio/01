@@ -1,28 +1,16 @@
-// ── JSONBin 설정 ───────────────────────────────────────
-// 1. jsonbin.io 가입 → API Keys에서 Master Key 복사
-// 2. Create Bin → 이름 hiraeth, 내용 {"users":[],"lib":{}} → 생성
-// 3. Bin URL의 ID 부분 복사 (https://api.jsonbin.io/v3/b/여기)
-const BIN_ID  = '여기에_BIN_ID_입력'
-const BIN_KEY = '여기에_MASTER_KEY_입력'
-
-const BIN_URL    = `https://api.jsonbin.io/v3/b/${BIN_ID}`
-const REMOTE_ON  = !BIN_ID.includes('여기에')
+const BLOB_URL = 'https://jsonblob.com/api/jsonBlob/019e73cb-0504-75eb-a61b-e086a917642c'
 
 async function remoteGet() {
-  if (!REMOTE_ON) return null
   try {
-    const r = await fetch(`${BIN_URL}/latest?meta=false`, {
-      headers: { 'X-Master-Key': BIN_KEY }
-    })
+    const r = await fetch(BLOB_URL)
     return r.ok ? await r.json() : null
   } catch { return null }
 }
 
 function remotePut(data) {
-  if (!REMOTE_ON) return Promise.resolve()
-  return fetch(BIN_URL, {
+  return fetch(BLOB_URL, {
     method:  'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY },
+    headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify(data)
   }).catch(() => {})
 }
@@ -44,11 +32,9 @@ function mergeDb(local, remote, currentUid) {
     merged.users.push(id === currentUid ? (l || r) : (r || l))
   }
 
-  // 내 라이브러리는 로컬 우선
   if (currentUid && local.lib?.[currentUid]) {
     merged.lib[currentUid] = local.lib[currentUid]
   }
-  // 로컬에만 있는 라이브러리 보존
   for (const [id, lib] of Object.entries(local.lib || {})) {
     if (!merged.lib[id]) merged.lib[id] = lib
   }
