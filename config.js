@@ -1,16 +1,19 @@
-const BLOB_URL = 'https://jsonblob.com/api/jsonBlob/019e73cb-0504-75eb-a61b-e086a917642c'
+const BIN_URL = 'https://api.jsonbin.io/v3/b/6a19a3e0ddf5aa59f774b98e'
+const BIN_KEY = '$2a$10$A4xozDf7hEofBvpQcaQzV.966f8BRivApOKjioGzuajdKzMN.raTq'
 
 async function remoteGet() {
   try {
-    const r = await fetch(BLOB_URL)
+    const r = await fetch(`${BIN_URL}/latest?meta=false`, {
+      headers: { 'X-Master-Key': BIN_KEY }
+    })
     return r.ok ? await r.json() : null
   } catch { return null }
 }
 
 function remotePut(data) {
-  return fetch(BLOB_URL, {
+  return fetch(BIN_URL, {
     method:  'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY },
     body:    JSON.stringify(data)
   }).catch(() => {})
 }
