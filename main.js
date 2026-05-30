@@ -285,7 +285,7 @@ function renderHeader() {
     ? `<button onclick="location.href='profile.html?id=${u.id}'" style="display:flex;align-items:center;gap:6px;color:var(--t);font-size:13px"><span style="width:8px;height:8px;border-radius:50%;background:${u.color};display:inline-block;flex-shrink:0"></span>${u.name}</button>
        <button onclick="location.href='friends.html'" style="color:var(--s)">친구들</button>
        ${u.isAdmin ? `<button onclick="location.href='admin.html'" style="color:var(--a)">관리자</button>` : ''}
-       ${!u.isAdmin ? `<button onclick="openFeedback()" style="color:var(--s);border:1px solid var(--b);padding:3px 10px;border-radius:8px">후기!</button>` : ''}
+       ${!u.isAdmin ? `<button onclick="openFeedback()" style="color:var(--s);border:1px solid var(--b);padding:3px 12px;border-radius:999px">후기!</button>` : ''}
        <button onclick="openAddUser()" style="border:1px solid var(--b);padding:3px 10px;border-radius:8px;color:var(--s)">+ 사용자</button>
        <button onclick="doLogout()">로그아웃</button>`
     : `<button class="login-btn" onclick="showLogin()">로그인</button>`
