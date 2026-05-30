@@ -241,7 +241,7 @@ function renderDiscover() {
   if (!tracks.length) { wrap.style.display='none'; return }
   wrap.style.display = 'block'
   const picked = tracks.sort(()=>Math.random()-.5).slice(0,4)
-  setDiscoverGrid(discoverGrid)
+  setDiscoverGrid(window.innerWidth <= 620 ? 1 : discoverGrid)
   document.getElementById('discover').innerHTML = picked.map(t => {
     const img = bigArt(t.artworkUrl100)
     return `<div class="pick-card fade-in">
