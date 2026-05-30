@@ -311,9 +311,23 @@ function mkFolder() {
 }
 document.getElementById('fn').addEventListener('keydown', e => e.key==='Enter' && mkFolder())
 
+async function pullRemote() {
+  const r = await remoteGet()
+  if (!r) return
+  const before = r.users?.length || 0
+  db = mergeDb(db, r, uid)
+  expirePicks()
+  if (before < db.users.length) sync(); else save()
+  renderAll(); renderHeader()
+}
+
 ;(async () => {
   const remote = await remoteGet()
-  if (remote) { db = mergeDb(db, remote, uid); save() }
+  if (remote) {
+    const before = remote.users?.length || 0
+    db = mergeDb(db, remote, uid)
+    if (before < db.users.length) sync(); else save()
+  }
   expirePicks()
   await initAdmin()
   if (uid && !db.users.find(u => u.id===uid)) { uid=null; saveUid() }
@@ -321,13 +335,6 @@ document.getElementById('fn').addEventListener('keydown', e => e.key==='Enter' &
   renderSwatches()
   renderHeader()
   renderAll()
-  setInterval(async () => {
-    if (document.hidden) return
-    const r = await remoteGet()
-    if (!r) return
-    db = mergeDb(db, r, uid)
-    save()
-    expirePicks()
-    renderAll(); renderHeader()
-  }, 30000)
+  setInterval(() => { if (!document.hidden) pullRemote() }, 15000)
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) pullRemote() })
 })()
