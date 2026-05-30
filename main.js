@@ -108,9 +108,15 @@ async function initAdmin() {
 
 let timer = null
 const qEl = document.getElementById('q'), res = document.getElementById('results')
+function posRes() {
+  const r = qEl.getBoundingClientRect()
+  res.style.top = (r.bottom + 6) + 'px'
+  res.style.left = r.left + 'px'
+  res.style.width = r.width + 'px'
+}
 qEl.addEventListener('input', () => { clearTimeout(timer); const q=qEl.value.trim(); if(!q){res.style.display='none';return}; timer=setTimeout(()=>search(q),350) })
 qEl.addEventListener('blur',  () => setTimeout(() => res.style.display='none', 160))
-qEl.addEventListener('focus', () => { if(res.innerHTML) res.style.display='block' })
+qEl.addEventListener('focus', () => { if(res.innerHTML){ posRes(); res.style.display='block' } })
 qEl.addEventListener('keydown', e => e.key==='Escape' && (res.style.display='none'))
 
 async function search(q) {
@@ -120,7 +126,7 @@ async function search(q) {
     <div class="ri" onclick="pickTrack(${t.trackId})">
       ${t.artworkUrl100?`<img src="${t.artworkUrl100.replace('100x100bb','60x60bb')}">`:''}<div><div class="rn">${t.trackName}</div><div class="ra">${t.artistName}</div></div>
     </div>`).join('') || `<div style="padding:14px;text-align:center;font-size:13px;color:var(--s)">결과 없음</div>`
-  res.style.display = 'block'
+  posRes(); res.style.display = 'block'
 }
 
 function pickTrack(id) {
