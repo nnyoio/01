@@ -10,23 +10,23 @@ function toggleDark() {
   if (btn) btn.innerHTML = on ? ICON_SUN : ICON_MOON
 }
 
-const BIN_URL = 'https://api.jsonbin.io/v3/b/6a19a3e0ddf5aa59f774b98e'
-const BIN_KEY = '$2a$10$A4xozDf7hEofBvpQcaQzV.966f8BRivApOKjioGzuajdKzMN.raTq'
+const SB_URL = 'https://xpwiywbqvgyzmwonpjkj.supabase.co/rest/v1/store'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhwd2l5d2Jxdmd5em13b25wamtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzI0OTIsImV4cCI6MjA5NTY0ODQ5Mn0.RLh3WwJh-o3cIE0reO1z68_2dZ6oVj0nDhhu5wt5_3U'
+const SB_HDR = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' }
 
 async function remoteGet() {
   try {
-    const r = await fetch(`${BIN_URL}/latest?meta=false`, {
-      headers: { 'X-Master-Key': BIN_KEY }
-    })
-    return r.ok ? await r.json() : null
+    const r = await fetch(`${SB_URL}?id=eq.1&select=data`, { headers: SB_HDR })
+    const json = await r.json()
+    return r.ok && json[0] ? json[0].data : null
   } catch { return null }
 }
 
 function remotePut(data) {
-  return fetch(BIN_URL, {
-    method:  'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY },
-    body:    JSON.stringify(data)
+  return fetch(`${SB_URL}?id=eq.1`, {
+    method:  'PATCH',
+    headers: SB_HDR,
+    body:    JSON.stringify({ data })
   }).catch(() => {})
 }
 
