@@ -36,6 +36,7 @@ function mergeDb(local, remote, currentUid) {
 
   const allIds = new Set(remote.users.map(u => u.id))
   if (currentUid && local.users?.some(u => u.id === currentUid)) allIds.add(currentUid)
+  if (remote.users.length < (local.users?.length || 0)) local.users?.forEach(u => allIds.add(u.id))
 
   merged.users = []
   for (const id of allIds) {

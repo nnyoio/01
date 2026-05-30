@@ -60,8 +60,9 @@ function toast(msg) {
 }
 
 let targetId, target
-let isEditing   = false
+let isEditing = false
 let pendingColor = COLORS[0]
+let pendingLibPublic = false
 let _artistResults = [], _songResults = []
 let artistTimer = null, songTimer = null
 
@@ -151,6 +152,21 @@ function viewMode(u, isMine, isAdmin, safeUrl, instaHandle, instaUrl) {
       </div>` : ''}
       ${safeUrl ? `<a href="${safeUrl}" target="_blank" class="plink">▶ 플리 보기</a>` : ''}
     </div>
+    ${(isMine || u.libPublic) && lib.tracks.length > 0 ? `
+    <div class="p-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:13px;font-weight:500;color:var(--t)">라이브러리</span>
+        ${isMine && !u.libPublic ? `<span style="font-size:11px;color:var(--s);opacity:.55">🔒 나만 보임</span>` : ''}
+      </div>
+      ${lib.tracks.slice(0,30).map(t => `
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--b)">
+          ${t.artworkUrl100 ? `<img src="${t.artworkUrl100.replace('100x100bb','60x60bb')}" style="width:36px;height:36px;border-radius:6px;object-fit:cover;flex-shrink:0">` : ''}
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(t.trackName)}</div>
+            <div style="font-size:11px;color:var(--s)">${esc(t.artistName)}</div>
+          </div>
+        </div>`).join('')}
+    </div>` : ''}
     <div class="p-actions">
       ${isMine || isAdmin ? `<button class="btn-p" onclick="startEdit()">수정하기</button>` : ''}
       ${isAdmin ? `<button class="btn-g" style="border-color:rgba(196,133,106,.4);color:var(--a)" onclick="deleteUser()">계정 삭제</button>` : ''}
@@ -207,6 +223,13 @@ function editForm(u) {
 
       <input class="inp" id="p-insta"    type="text" placeholder="인스타 아이디 (예: @username)" value="${esc(u.insta||'')}"/>
       <input class="inp" id="p-playlist" type="url"  placeholder="유튜브 / 스포티파이 플리 링크"  value="${esc(u.playlist||'')}"/>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--b);margin-top:4px">
+        <span style="font-size:13px;color:var(--t)">라이브러리 공개</span>
+        <button type="button" id="lib-pub-btn" onclick="toggleLibPublic()"
+          style="font-size:12px;padding:4px 14px;border-radius:999px;border:1px solid var(--bs);color:${pendingLibPublic?'var(--a)':'var(--s)'}">
+          ${pendingLibPublic ? '공개' : '비공개'}
+        </button>
+      </div>
     </div>
     <div class="p-actions">
       <button class="btn-p" onclick="saveProfile()">저장</button>
@@ -304,7 +327,13 @@ function selectSong(i) {
 }
 
 // ── 저장 / 삭제 ──────────────────────────────────────
-function startEdit()  { pendingColor = target.color; isEditing = true;  renderPage() }
+function toggleLibPublic() {
+  pendingLibPublic = !pendingLibPublic
+  const btn = document.getElementById('lib-pub-btn')
+  if (btn) { btn.textContent = pendingLibPublic ? '공개' : '비공개'; btn.style.color = pendingLibPublic ? 'var(--a)' : 'var(--s)' }
+}
+
+function startEdit()  { pendingColor = target.color; pendingLibPublic = !!target.libPublic; isEditing = true; renderPage() }
 function cancelEdit() { isEditing = false; renderPage() }
 
 function saveProfile() {
@@ -323,6 +352,7 @@ function saveProfile() {
   db.users[i].songArtist = document.getElementById('p-song-artist').value
   db.users[i].insta      = document.getElementById('p-insta').value.trim()
   db.users[i].playlist   = document.getElementById('p-playlist').value.trim()
+  db.users[i].libPublic  = pendingLibPublic
   Object.assign(target, db.users[i])
   sync(); isEditing = false; renderPage(); toast('저장됐어')
 }
