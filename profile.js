@@ -62,7 +62,7 @@ function toast(msg) {
 let targetId, target
 let isEditing = false
 let pendingColor = COLORS[0]
-let pendingLibPublic = false
+let pendingLibPublic = true
 let _artistResults = [], _songResults = []
 let artistTimer = null, songTimer = null
 
@@ -333,7 +333,7 @@ function toggleLibPublic() {
   if (btn) { btn.textContent = pendingLibPublic ? '공개' : '비공개'; btn.style.color = pendingLibPublic ? 'var(--a)' : 'var(--s)' }
 }
 
-function startEdit()  { pendingColor = target.color; pendingLibPublic = !!target.libPublic; isEditing = true; renderPage() }
+function startEdit()  { pendingColor = target.color; pendingLibPublic = target.libPublic !== false; isEditing = true; renderPage() }
 function cancelEdit() { isEditing = false; renderPage() }
 
 function saveProfile() {
