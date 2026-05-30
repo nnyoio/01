@@ -207,6 +207,7 @@ main{max-width:860px;margin:0 auto;padding:44px 16px}
 
 @media(max-width:620px){
   #user-cards{grid-template-columns:1fr}
+  #discover-wrap{margin-top:20px}
 }
 @media(max-width:400px){
   .p-stats{grid-template-columns:repeat(3,1fr);gap:5px}
