@@ -71,7 +71,7 @@ h1 span{color:var(--a)}
 #search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--s)}
 #q{width:100%;padding:13px 16px 13px 42px;border-radius:16px;font-size:13px;outline:none;background:var(--bg);border:1px solid var(--bs);color:var(--t)}
 #q::placeholder{color:var(--s);opacity:.6}
-#results{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg);border:1px solid var(--bs);border-radius:14px;overflow-y:auto;max-height:300px;box-shadow:0 8px 28px rgba(0,0,0,.12);z-index:50}
+#results{display:none;position:absolute;bottom:calc(100% + 6px);top:auto;left:0;right:0;background:var(--bg);border:1px solid var(--bs);border-radius:14px;overflow-y:auto;max-height:300px;box-shadow:0 8px 28px rgba(0,0,0,.18);z-index:50}
 .ri{display:flex;align-items:center;gap:11px;padding:9px 13px;cursor:pointer;transition:background .12s}
 .ri:hover{background:var(--card)}
 .ri:not(:last-child){border-bottom:1px solid var(--b)}
