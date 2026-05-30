@@ -226,7 +226,31 @@ function delFolder(id) {
   lib.tracks  = lib.tracks.filter(t => t.folderId!==id)
   fid = 'all'; sync(); renderLib()
 }
-function renderAll() { renderPicks(); renderLib() }
+function renderDiscover() {
+  const tracks = []
+  db.users.forEach(u => {
+    if (!u.libPublic || u.id === uid) return
+    const lib = db.lib[u.id] || {tracks:[]}
+    lib.tracks.forEach(t => tracks.push({...t, _name:u.name, _color:u.color, _id:u.id}))
+  })
+  const wrap = document.getElementById('discover-wrap')
+  if (!tracks.length) { wrap.style.display='none'; return }
+  wrap.style.display = 'block'
+  const picked = tracks.sort(()=>Math.random()-.5).slice(0,12)
+  document.getElementById('discover').innerHTML = picked.map(t => {
+    const img = bigArt(t.artworkUrl100)
+    return `<div class="pick-card fade-in">
+      ${img?`<img src="${img}">`:''}
+      <div class="pi">
+        <button class="who" onclick="viewProfile('${t._id}')" style="width:100%;text-align:left"><span style="background:${t._color}"></span>${t._name}의 라이브러리</button>
+        <div style="font-size:14px;font-weight:500;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px">${t.trackName}</div>
+        <div style="font-size:11px;color:var(--s);margin-top:2px">${t.artistName}</div>
+        ${t.previewUrl?`<audio controls src="${t.previewUrl}"></audio>`:''}
+        <a href="${spotUrl(t)}" target="_blank" style="display:inline-block;margin-top:7px;font-size:11px;border:1px solid var(--b);padding:2px 9px;border-radius:999px;color:var(--s)">Spotify ↗</a>
+      </div></div>`}).join('')
+}
+
+function renderAll() { renderPicks(); renderDiscover(); renderLib() }
 
 function renderHeader() {
   const u = me(), el = document.getElementById('hdr-right')
