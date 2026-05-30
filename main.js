@@ -272,6 +272,7 @@ function renderHeader() {
     ? `<button onclick="location.href='profile.html?id=${u.id}'" style="display:flex;align-items:center;gap:6px;color:var(--t);font-size:13px"><span style="width:8px;height:8px;border-radius:50%;background:${u.color};display:inline-block;flex-shrink:0"></span>${u.name}</button>
        <button onclick="location.href='friends.html'" style="color:var(--s)">친구들</button>
        ${u.isAdmin ? `<button onclick="location.href='admin.html'" style="color:var(--a)">관리자</button>` : ''}
+       ${!u.isAdmin ? `<button onclick="openFeedback()" style="color:var(--s)">📬</button>` : ''}
        <button onclick="openAddUser()">+ 사용자</button>
        <button onclick="doLogout()">로그아웃</button>`
     : `<button class="login-btn" onclick="showLogin()">로그인</button>`
@@ -341,6 +342,30 @@ async function addUser() {
 }
 
 function doLogout() { uid=null; saveUid(); renderHeader(); renderAll() }
+
+let pendingRating = 0
+function setRating(n) {
+  pendingRating = n
+  document.querySelectorAll('.star-btn').forEach(b => {
+    b.style.opacity = parseInt(b.dataset.v) <= n ? '1' : '.3'
+    b.style.color = parseInt(b.dataset.v) <= n ? 'var(--a)' : ''
+  })
+}
+
+function openFeedback() {
+  pendingRating = 0
+  document.getElementById('fb-text').value = ''
+  document.querySelectorAll('.star-btn').forEach(b => { b.style.opacity='.3'; b.style.color='' })
+  show('ov-feedback')
+}
+
+function submitFeedback() {
+  const text = document.getElementById('fb-text').value.trim()
+  if (!pendingRating && !text) { toast('별점이나 내용을 입력해줘'); return }
+  if (!db.feedback) db.feedback = []
+  db.feedback.push({ id:Date.now()+'', userId:uid, userName:me()?.name||'익명', rating:pendingRating, text, createdAt:Date.now(), read:false })
+  sync(); hide('ov-feedback'); toast('보냈어 👍')
+}
 
 function openFolder() { show('ov-folder'); document.getElementById('fn').value=''; setTimeout(()=>document.getElementById('fn').focus(),50) }
 function mkFolder() {

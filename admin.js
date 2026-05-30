@@ -67,6 +67,8 @@ function doLogout() { localStorage.removeItem('mt_uid'); location.href='index.ht
 function renderPage() {
   const totalTracks = Object.values(db.lib).reduce((a,l)=>a+l.tracks.length,0)
   const totalPicks  = db.users.filter(u=>u.todayPick).length
+  const feedbacks   = (db.feedback || []).slice().reverse()
+  const unread      = feedbacks.filter(f=>!f.read).length
 
   document.getElementById('page').innerHTML = `
     <div class="admin-stats">
@@ -74,9 +76,37 @@ function renderPage() {
       <div class="admin-stat"><b>${totalTracks}</b>총 트랙</div>
       <div class="admin-stat"><b>${totalPicks}</b>오늘의 추천</div>
     </div>
+
+    ${feedbacks.length ? `
+    <div style="margin-bottom:28px">
+      <div style="font-size:15px;font-weight:500;color:var(--t);margin-bottom:12px">
+        📬 개선점 <span style="font-size:12px;color:var(--a);margin-left:6px">${unread ? `${unread}개 미확인` : '모두 읽음'}</span>
+      </div>
+      ${feedbacks.map(f => `
+        <div id="fb-${f.id}" style="padding:14px;background:${f.read?'var(--card)':'var(--warm)'};border:1px solid var(--b);border-radius:14px;margin-bottom:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:13px;font-weight:500;color:var(--t)">${esc(f.userName)}</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;color:var(--s)">${new Date(f.createdAt).toLocaleDateString('ko-KR')}</span>
+              ${!f.read ? `<button onclick="markFeedbackRead('${f.id}')" style="font-size:11px;padding:2px 10px;border-radius:999px;border:1px solid var(--b);color:var(--s)">읽음</button>` : ''}
+            </div>
+          </div>
+          ${f.rating ? `<div style="font-size:16px;color:var(--a);margin-bottom:4px">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>` : ''}
+          ${f.text ? `<p style="font-size:13px;color:var(--t);line-height:1.6;white-space:pre-wrap">${esc(f.text)}</p>` : ''}
+        </div>`).join('')}
+    </div>` : ''}
+
     <div id="user-list">
       ${db.users.map(u => userCard(u)).join('')}
     </div>`
+}
+
+function markFeedbackRead(id) {
+  const f = (db.feedback || []).find(f => f.id === id); if (!f) return
+  f.read = true
+  sync()
+  const el = document.getElementById(`fb-${id}`)
+  if (el) { el.style.background = 'var(--card)'; el.querySelector('button')?.remove() }
 }
 
 function userCard(u) {

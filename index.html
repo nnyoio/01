@@ -84,6 +84,23 @@
   </div>
 </div>
 
+<!-- 개선점 -->
+<div class="overlay" id="ov-feedback" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <h3>개선점 보내기</h3>
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:14px" id="fb-stars">
+      <button onclick="setRating(1)" class="star-btn" data-v="1" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:.3">★</button>
+      <button onclick="setRating(2)" class="star-btn" data-v="2" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:.3">★</button>
+      <button onclick="setRating(3)" class="star-btn" data-v="3" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:.3">★</button>
+      <button onclick="setRating(4)" class="star-btn" data-v="4" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:.3">★</button>
+      <button onclick="setRating(5)" class="star-btn" data-v="5" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:.3">★</button>
+    </div>
+    <textarea class="inp" id="fb-text" placeholder="불편한 점이나 개선됐으면 하는 것들 자유롭게 써줘! (선택)" rows="4" maxlength="500" style="resize:none"></textarea>
+    <button class="btn-p" onclick="submitFeedback()">보내기</button>
+    <button class="btn-g" onclick="hide('ov-feedback')">취소</button>
+  </div>
+</div>
+
 <!-- 트랙 옵션 -->
 <div class="overlay" id="ov-track" onclick="if(event.target===this)hide('ov-track')">
   <div class="modal">
