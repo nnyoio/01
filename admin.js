@@ -92,6 +92,7 @@ function userCard(u) {
         ${!u.isAdmin ? `
           <button class="admin-btn" onclick="toggleForm('${u.id}','edit')">프로필 편집</button>
           <button class="admin-btn" onclick="toggleForm('${u.id}','pw')">비밀번호 재설정</button>
+          ${u.todayPick ? `<button class="admin-btn" onclick="removePick('${u.id}')">추천 내리기</button>` : ''}
           <button class="admin-btn danger" onclick="deleteUser('${u.id}')">계정 삭제</button>` : ''}
       </div>
       <div id="aform-${u.id}" style="display:none"></div>
@@ -162,6 +163,12 @@ async function savePw(userId) {
   db.users[i].pin  = await hashPin(raw, salt)
   db.users[i].salt = salt
   sync(); closeAllForms(); toast(`${db.users[i].name} 비밀번호 재설정 완료`)
+}
+
+function removePick(userId) {
+  const i = db.users.findIndex(u => u.id === userId); if (i < 0) return
+  db.users[i].todayPick = null
+  sync(); renderPage(); toast(`${db.users[i].name} 추천곡 내렸어`)
 }
 
 function deleteUser(userId) {

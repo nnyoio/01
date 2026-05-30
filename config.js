@@ -24,10 +24,9 @@ function mergeDb(local, remote, currentUid) {
   if (!remote?.users) return local
   const merged = { lib: { ...remote.lib } }
 
-  const allIds = new Set([
-    ...(remote.users || []).map(u => u.id),
-    ...(local.users  || []).map(u => u.id),
-  ])
+  const allIds = new Set(remote.users.map(u => u.id))
+  if (currentUid && local.users?.some(u => u.id === currentUid)) allIds.add(currentUid)
+
   merged.users = []
   for (const id of allIds) {
     const r = remote.users?.find(u => u.id === id)
@@ -39,7 +38,7 @@ function mergeDb(local, remote, currentUid) {
     merged.lib[currentUid] = local.lib[currentUid]
   }
   for (const [id, lib] of Object.entries(local.lib || {})) {
-    if (!merged.lib[id]) merged.lib[id] = lib
+    if (!merged.lib[id] && allIds.has(id)) merged.lib[id] = lib
   }
 
   return merged
