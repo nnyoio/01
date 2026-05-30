@@ -255,7 +255,29 @@ function renderDiscover() {
       </div></div>`}).join('')
 }
 
-function renderAll() { renderPicks(); renderDiscover(); renderLib() }
+const sectionOpen = {
+  picks:    localStorage.getItem('mt_s_picks')    !== 'false',
+  discover: localStorage.getItem('mt_s_discover') !== 'false',
+}
+function toggleSection(id) {
+  sectionOpen[id] = !sectionOpen[id]
+  localStorage.setItem(`mt_s_${id}`, sectionOpen[id])
+  applySectionState(id)
+}
+function applySectionState(id) {
+  const open = sectionOpen[id]
+  if (id === 'picks') {
+    document.getElementById('picks').style.display = open ? '' : 'none'
+    const ch = document.getElementById('picks-chevron')
+    if (ch) ch.textContent = open ? '∨' : '∧'
+  } else {
+    document.getElementById('discover').style.display = open ? '' : 'none'
+    const ch = document.getElementById('discover-chevron')
+    if (ch) ch.textContent = open ? '∨' : '∧'
+  }
+}
+
+function renderAll() { renderPicks(); renderDiscover(); renderLib(); applySectionState('picks'); applySectionState('discover') }
 
 function renderHeader() {
   const u = me(), el = document.getElementById('hdr-right')

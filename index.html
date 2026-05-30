@@ -32,12 +32,16 @@
 </section>
 
 <main>
-  <div class="divider"><span>오늘의 추천곡을 추가해보세요</span></div>
+  <div class="divider" onclick="toggleSection('picks')" style="cursor:pointer">
+    <span>오늘의 추천곡을 추가해보세요</span>
+    <span id="picks-chevron" style="font-size:11px;color:var(--s);margin-left:8px">∨</span>
+  </div>
   <div id="picks"></div>
   <div id="discover-wrap" style="display:none">
-    <div class="divider">
+    <div class="divider" onclick="toggleSection('discover')" style="cursor:pointer">
       <span>둘러보기</span>
-      <button onclick="renderDiscover()" style="font-size:11px;color:var(--s);border:1px solid var(--b);padding:2px 10px;border-radius:999px;margin-left:8px">↻</button>
+      <button onclick="event.stopPropagation();renderDiscover()" style="font-size:11px;color:var(--s);border:1px solid var(--b);padding:2px 10px;border-radius:999px;margin-left:8px">↻</button>
+      <span id="discover-chevron" style="font-size:11px;color:var(--s);margin-left:6px">∨</span>
       <div style="display:flex;gap:4px;margin-left:8px">
         <button id="dg1" onclick="setDiscoverGrid(1)" style="font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--b);color:var(--s)">1</button>
         <button id="dg2" onclick="setDiscoverGrid(2)" style="font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--b);color:var(--s)">2</button>
