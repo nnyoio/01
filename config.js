@@ -1,3 +1,12 @@
+if (localStorage.getItem('mt_dark') === 'true') document.body.classList.add('dark')
+
+function toggleDark() {
+  const on = document.body.classList.toggle('dark')
+  localStorage.setItem('mt_dark', on ? 'true' : 'false')
+  const btn = document.getElementById('darkbtn')
+  if (btn) btn.textContent = on ? '☀' : '🌙'
+}
+
 const BIN_URL = 'https://api.jsonbin.io/v3/b/6a19a3e0ddf5aa59f774b98e'
 const BIN_KEY = '$2a$10$A4xozDf7hEofBvpQcaQzV.966f8BRivApOKjioGzuajdKzMN.raTq'
 

@@ -1,35 +1,44 @@
 @font-face{font-family:E;src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_eunbyul21-Rg.woff2')format('woff2');font-display:swap}
 
-/* ── 기본 팔레트 (필름) ─────────────────────────────── */
 :root{--bg:#F2EAD9;--card:#E8D9C0;--warm:#DDD3C9;--t:#3D2B1F;--s:#8B6F52;--a:#C4856A;--at:#F2EAD9;--b:rgba(139,111,82,.35);--bs:rgba(139,111,82,.55)}
 
-/* ── 12 팔레트 (CSS 클래스 방식) ───────────────────── */
-/* 1. 필름 — Wave to Earth 크림/브라운 */
-body.p-film{--bg:#F2EAD9;--card:#E8D9C0;--warm:#DDD3C9;--t:#3D2B1F;--s:#8B6F52;--a:#C4856A;--at:#F2EAD9;--b:rgba(139,111,82,.35);--bs:rgba(139,111,82,.55)}
-/* 2. 다크 아카데미아 — Baby Barn Owl + Burnt Crimson */
-body.p-academia{--bg:#130F0D;--card:#301415;--warm:#551F22;--t:#C4C1B8;--s:rgba(196,193,184,.6);--a:#635B51;--at:#C4C1B8;--b:rgba(196,193,184,.2);--bs:rgba(196,193,184,.4)}
-/* 3. 캔디 팝 — Honeydew + Cotton Candy */
-body.p-candy{--bg:#EDF8E5;--card:#E8FFBE;--warm:#FFB8E3;--t:#3D1525;--s:#CE4A4A;--a:#FF819C;--at:#EDF8E5;--b:rgba(206,74,74,.25);--bs:rgba(206,74,74,.45)}
-/* 4. 수국 — Vetiver + Duck Egg + Hydrangea */
-body.p-hydrangea{--bg:#EAF5F2;--card:#B8D5DA;--warm:#9EC0EB;--t:#193A31;--s:#538376;--a:#F1B8D9;--at:#193A31;--b:rgba(83,131,118,.3);--bs:rgba(83,131,118,.55)}
-/* 5. 작약 — Olive Petal + Golden Clover + Peach Blossom */
-body.p-peony{--bg:#EFEBCE;--card:#D7CE93;--warm:#A3A380;--t:#3D3A20;--s:#7A7850;--a:#BB8588;--at:#EFEBCE;--b:rgba(163,163,128,.35);--bs:rgba(163,163,128,.6)}
-/* 6. 아틱 — Moonlight + Frost Blue + Oxford Blue */
-body.p-arctic{--bg:#F0ECDD;--card:#C8D3E6;--warm:#8BA3C5;--t:#02122F;--s:#495B7D;--a:#495B7D;--at:#F0ECDD;--b:rgba(73,91,125,.3);--bs:rgba(73,91,125,.55)}
-/* 7. 빈티지 필름 — Steel Teal + French Beige + Copper Red */
-body.p-vintage{--bg:#EDE4D0;--card:#CFB580;--warm:#578088;--t:#1A0800;--s:#2D4D45;--a:#CA7C4C;--at:#EDE4D0;--b:rgba(45,77,69,.3);--bs:rgba(45,77,69,.55)}
-/* 8. 심해 — Phlox + Verbena + Phthalo Blue */
-body.p-ocean{--bg:#0A0A1A;--card:#0E155E;--warm:#206ABC;--t:#CAA9F3;--s:rgba(121,151,230,.7);--a:#B37AD4;--at:#0A0A1A;--b:rgba(121,151,230,.2);--bs:rgba(121,151,230,.4)}
-/* 9. 앰버 — Champagne + Whiskey Sour + Balsamico */
-body.p-amber{--bg:#0C0804;--card:#150C0C;--warm:#34150F;--t:#EACEAA;--s:rgba(234,206,170,.6);--a:#D39858;--at:#150C0C;--b:rgba(234,206,170,.15);--bs:rgba(234,206,170,.35)}
-/* 10. 노티컬 — Tan + Alabaster + Midnight Blue */
-body.p-nautical{--bg:#EFE8DF;--card:#D8BA98;--warm:#96C0CE;--t:#0F414A;--s:rgba(15,65,74,.6);--a:#7F0303;--at:#EFE8DF;--b:rgba(15,65,74,.25);--bs:rgba(15,65,74,.45)}
-/* 11. 말차 — Warm Fog + Berry Good + Soldier Green */
-body.p-matcha{--bg:#DDD3C9;--card:#ECC4C3;--warm:#B97D7B;--t:#3D3B1A;--s:#524F2E;--a:#575527;--at:#DDD3C9;--b:rgba(61,59,26,.3);--bs:rgba(61,59,26,.5)}
-/* 12. 정글 — Dark Jungle Green + Verdigris + Forest Green */
-body.p-jungle{--bg:#0F1210;--card:#193A31;--warm:#1D6C61;--t:#3EB9A8;--s:rgba(62,185,168,.65);--a:#5AA371;--at:#0F1210;--b:rgba(62,185,168,.2);--bs:rgba(62,185,168,.4)}
+/* t1 */
+body.p-t1{--bg:#F2EAD9;--card:#E8D9C0;--warm:#DDD3C9;--t:#3D2B1F;--s:#8B6F52;--a:#C4856A;--at:#F2EAD9;--b:rgba(139,111,82,.35);--bs:rgba(139,111,82,.55)}
+body.dark.p-t1{--bg:#1A1008;--card:#2D1B0F;--warm:#3D2515;--t:#F2EAD9;--s:#C4A882;--a:#C4856A;--at:#1A1008;--b:rgba(196,133,106,.2);--bs:rgba(196,133,106,.4)}
+/* t2 */
+body.p-t2{--bg:#F5EEEC;--card:#E8D4D4;--warm:#C4A0A0;--t:#2D1515;--s:#7A4545;--a:#8B1C22;--at:#F5EEEC;--b:rgba(139,28,34,.2);--bs:rgba(139,28,34,.4)}
+body.dark.p-t2{--bg:#130F0D;--card:#301415;--warm:#551F22;--t:#C4C1B8;--s:rgba(196,193,184,.6);--a:#635B51;--at:#C4C1B8;--b:rgba(196,193,184,.2);--bs:rgba(196,193,184,.4)}
+/* t3 */
+body.p-t3{--bg:#EDF8E5;--card:#E8FFBE;--warm:#FFB8E3;--t:#3D1525;--s:#CE4A4A;--a:#FF819C;--at:#EDF8E5;--b:rgba(206,74,74,.25);--bs:rgba(206,74,74,.45)}
+body.dark.p-t3{--bg:#0F080C;--card:#1A0F12;--warm:#2A1520;--t:#FFD8E8;--s:rgba(255,180,200,.65);--a:#FF819C;--at:#0F080C;--b:rgba(255,129,156,.2);--bs:rgba(255,129,156,.4)}
+/* t4 */
+body.p-t4{--bg:#EAF5F2;--card:#B8D5DA;--warm:#9EC0EB;--t:#193A31;--s:#538376;--a:#F1B8D9;--at:#193A31;--b:rgba(83,131,118,.3);--bs:rgba(83,131,118,.55)}
+body.dark.p-t4{--bg:#080F0C;--card:#0F2018;--warm:#152D26;--t:#C8E8E0;--s:rgba(150,200,185,.65);--a:#F1B8D9;--at:#080F0C;--b:rgba(83,131,118,.2);--bs:rgba(83,131,118,.4)}
+/* t5 */
+body.p-t5{--bg:#EFEBCE;--card:#D7CE93;--warm:#A3A380;--t:#3D3A20;--s:#7A7850;--a:#BB8588;--at:#EFEBCE;--b:rgba(163,163,128,.35);--bs:rgba(163,163,128,.6)}
+body.dark.p-t5{--bg:#0D0C06;--card:#1A1808;--warm:#252310;--t:#E8E4C0;--s:rgba(215,210,145,.65);--a:#BB8588;--at:#0D0C06;--b:rgba(185,180,130,.2);--bs:rgba(185,180,130,.4)}
+/* t6 */
+body.p-t6{--bg:#F0ECDD;--card:#C8D3E6;--warm:#8BA3C5;--t:#02122F;--s:#495B7D;--a:#495B7D;--at:#F0ECDD;--b:rgba(73,91,125,.3);--bs:rgba(73,91,125,.55)}
+body.dark.p-t6{--bg:#030810;--card:#071020;--warm:#0C1A30;--t:#C8D8F0;--s:rgba(140,165,210,.65);--a:#8BA3C5;--at:#030810;--b:rgba(73,91,125,.2);--bs:rgba(73,91,125,.45)}
+/* t7 */
+body.p-t7{--bg:#EDE4D0;--card:#CFB580;--warm:#578088;--t:#1A0800;--s:#2D4D45;--a:#CA7C4C;--at:#EDE4D0;--b:rgba(45,77,69,.3);--bs:rgba(45,77,69,.55)}
+body.dark.p-t7{--bg:#0A0605;--card:#18100A;--warm:#221A0E;--t:#E8DCCA;--s:rgba(200,175,125,.65);--a:#CA7C4C;--at:#0A0605;--b:rgba(202,124,76,.2);--bs:rgba(202,124,76,.4)}
+/* t8 */
+body.p-t8{--bg:#EDE8FF;--card:#C8C0F0;--warm:#A8B8E0;--t:#0E155E;--s:#4A3A9A;--a:#B37AD4;--at:#EDE8FF;--b:rgba(14,21,94,.2);--bs:rgba(14,21,94,.4)}
+body.dark.p-t8{--bg:#0A0A1A;--card:#0E155E;--warm:#206ABC;--t:#CAA9F3;--s:rgba(121,151,230,.7);--a:#B37AD4;--at:#0A0A1A;--b:rgba(121,151,230,.2);--bs:rgba(121,151,230,.4)}
+/* t9 */
+body.p-t9{--bg:#FFF8EC;--card:#FFE8C0;--warm:#F5CF90;--t:#3D1A00;--s:#7A4A10;--a:#D39858;--at:#FFF8EC;--b:rgba(211,152,88,.3);--bs:rgba(211,152,88,.55)}
+body.dark.p-t9{--bg:#0C0804;--card:#150C0C;--warm:#34150F;--t:#EACEAA;--s:rgba(234,206,170,.6);--a:#D39858;--at:#150C0C;--b:rgba(234,206,170,.15);--bs:rgba(234,206,170,.35)}
+/* t10 */
+body.p-t10{--bg:#EFE8DF;--card:#D8BA98;--warm:#96C0CE;--t:#0F414A;--s:rgba(15,65,74,.6);--a:#7F0303;--at:#EFE8DF;--b:rgba(15,65,74,.25);--bs:rgba(15,65,74,.45)}
+body.dark.p-t10{--bg:#060C0E;--card:#0C1820;--warm:#10252E;--t:#C8DDE5;--s:rgba(150,192,206,.65);--a:#7F0303;--at:#060C0E;--b:rgba(150,192,206,.2);--bs:rgba(150,192,206,.4)}
+/* t11 */
+body.p-t11{--bg:#DDD3C9;--card:#ECC4C3;--warm:#B97D7B;--t:#3D3B1A;--s:#524F2E;--a:#575527;--at:#DDD3C9;--b:rgba(61,59,26,.3);--bs:rgba(61,59,26,.5)}
+body.dark.p-t11{--bg:#0C0A07;--card:#181510;--warm:#221C15;--t:#D8D0C5;--s:rgba(200,185,155,.65);--a:#575527;--at:#0C0A07;--b:rgba(87,85,39,.2);--bs:rgba(87,85,39,.4)}
+/* t12 */
+body.p-t12{--bg:#E8F5F0;--card:#C5E5DC;--warm:#A5D5C8;--t:#0F2520;--s:#2A5545;--a:#5AA371;--at:#E8F5F0;--b:rgba(90,163,113,.25);--bs:rgba(90,163,113,.5)}
+body.dark.p-t12{--bg:#0F1210;--card:#193A31;--warm:#1D6C61;--t:#3EB9A8;--s:rgba(62,185,168,.65);--a:#5AA371;--at:#0F1210;--b:rgba(62,185,168,.2);--bs:rgba(62,185,168,.4)}
 
-/* ── 팔레트 전환 트랜지션 ─────────────────────────── */
 body,header,.card,.pick-card,.modal,.inp,.ftab,.btn-p,.btn-g,.opt-btn,.usel,#results,.ri,main,#lib,#picks{
   transition:background-color .35s ease,color .35s ease,border-color .35s ease;
 }
@@ -46,6 +55,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:50;height:52px;display:flex;a
 .sw.on{border-color:var(--t);transform:scale(1.2)}
 .sw:hover:not(.on){transform:scale(1.1)}
 #shuffle{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--b);color:var(--s);font-size:13px;display:flex;align-items:center;justify-content:center;transition:transform .4s ease;margin-left:2px}
+#darkbtn{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--b);color:var(--s);font-size:12px;display:flex;align-items:center;justify-content:center;margin-left:2px}
 #hdr-right{display:flex;align-items:center;gap:10px;font-size:12px}
 #hdr-right button{color:var(--s)}
 #hdr-right .login-btn{border:1px solid var(--bs);padding:4px 12px;border-radius:999px;color:var(--a)}
@@ -117,7 +127,6 @@ main{max-width:860px;margin:0 auto;padding:44px 16px}
 .opt-btn{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;background:var(--card);border:1px solid var(--b);cursor:pointer;width:100%;font-size:13px;color:var(--t);margin-bottom:7px;transition:border-color .15s;text-align:left}
 .opt-btn:hover{border-color:var(--a)}
 
-/* ── 프로필 페이지 ───────────────────────────────────── */
 .page-wrap{max-width:560px;margin:0 auto;padding:72px 16px 48px}
 .p-hero{text-align:center;padding:36px 20px 24px;background:var(--card);border:1px solid var(--b);border-radius:20px;margin-bottom:14px}
 .p-avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;margin:0 auto 14px}
@@ -140,7 +149,6 @@ main{max-width:860px;margin:0 auto;padding:44px 16px}
 .color-pick.active{border-color:var(--t);transform:scale(1.25)}
 .color-pick:hover:not(.active){transform:scale(1.1)}
 
-/* ── 관리자 패널 ─────────────────────────────────────── */
 .admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
 .admin-stat{background:var(--card);border:1px solid var(--b);border-radius:14px;padding:14px;text-align:center;font-size:11px;color:var(--s)}
 .admin-stat b{display:block;font-size:22px;color:var(--t);font-weight:500;margin-bottom:3px}

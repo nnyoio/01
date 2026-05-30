@@ -1,11 +1,12 @@
-// ── 팔레트 (CSS 클래스 방식) ───────────────────────────
 const PAL = [
-  {id:'film',s:'#C4856A'},{id:'academia',s:'#551F22'},{id:'candy',s:'#FF819C'},
-  {id:'hydrangea',s:'#9EC0EB'},{id:'peony',s:'#BB8588'},{id:'arctic',s:'#8BA3C5'},
-  {id:'vintage',s:'#CA7C4C'},{id:'ocean',s:'#B37AD4'},{id:'amber',s:'#D39858'},
-  {id:'nautical',s:'#7F0303'},{id:'matcha',s:'#575527'},{id:'jungle',s:'#3EB9A8'},
+  {id:'t1',s:'#C4856A'},{id:'t2',s:'#8B1C22'},{id:'t3',s:'#FF819C'},
+  {id:'t4',s:'#9EC0EB'},{id:'t5',s:'#BB8588'},{id:'t6',s:'#8BA3C5'},
+  {id:'t7',s:'#CA7C4C'},{id:'t8',s:'#B37AD4'},{id:'t9',s:'#D39858'},
+  {id:'t10',s:'#7F0303'},{id:'t11',s:'#575527'},{id:'t12',s:'#5AA371'},
 ]
-let curPal = localStorage.getItem('mt_pal') || 'film'
+const PAL_MIGRATE = {film:'t1',academia:'t2',candy:'t3',hydrangea:'t4',peony:'t5',arctic:'t6',vintage:'t7',ocean:'t8',amber:'t9',nautical:'t10',matcha:'t11',jungle:'t12'}
+let curPal = localStorage.getItem('mt_pal') || 't1'
+if (PAL_MIGRATE[curPal]) { curPal = PAL_MIGRATE[curPal]; localStorage.setItem('mt_pal', curPal) }
 
 function applyTheme(id) {
   document.body.classList.forEach(c => { if (c.startsWith('p-')) document.body.classList.remove(c) })
@@ -27,7 +28,8 @@ function shuffleTheme() {
 function renderSwatches() {
   document.getElementById('swatches').innerHTML =
     PAL.map(p => `<div class="sw${p.id===curPal?' on':''}" data-k="${p.id}" style="background:${p.s}" onclick="applyTheme('${p.id}')"></div>`).join('') +
-    `<button id="shuffle" onclick="shuffleTheme()" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--b);color:var(--s);font-size:13px;display:flex;align-items:center;justify-content:center;transition:transform .4s ease;margin-left:3px">↻</button>`
+    `<button id="shuffle" onclick="shuffleTheme()" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--b);color:var(--s);font-size:13px;display:flex;align-items:center;justify-content:center;transition:transform .4s ease;margin-left:3px">↻</button>` +
+    `<button id="darkbtn" onclick="toggleDark()">${document.body.classList.contains('dark')?'☀':'🌙'}</button>`
 }
 
 // ── 보안 (PBKDF2 + 유저별 랜덤 솔트) ────────────────
