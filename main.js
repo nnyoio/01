@@ -226,6 +226,19 @@ function delFolder(id) {
   lib.tracks  = lib.tracks.filter(t => t.folderId!==id)
   fid = 'all'; sync(); renderLib()
 }
+let discoverGrid = parseInt(localStorage.getItem('mt_dgrid') || '4')
+function setDiscoverGrid(n) {
+  discoverGrid = n
+  localStorage.setItem('mt_dgrid', n)
+  document.getElementById('discover').style.gridTemplateColumns = `repeat(${n},1fr)`
+  ;[1,2,4].forEach(v => {
+    const btn = document.getElementById(`dg${v}`)
+    if (btn) btn.style.background = v===n ? 'var(--a)' : ''
+    if (btn) btn.style.color = v===n ? 'var(--at)' : 'var(--s)'
+    if (btn) btn.style.borderColor = v===n ? 'var(--a)' : 'var(--b)'
+  })
+}
+
 function renderDiscover() {
   const tracks = []
   db.users.forEach(u => {
@@ -237,6 +250,7 @@ function renderDiscover() {
   if (!tracks.length) { wrap.style.display='none'; return }
   wrap.style.display = 'block'
   const picked = tracks.sort(()=>Math.random()-.5).slice(0,12)
+  setDiscoverGrid(discoverGrid)
   document.getElementById('discover').innerHTML = picked.map(t => {
     const img = bigArt(t.artworkUrl100)
     return `<div class="pick-card fade-in">
