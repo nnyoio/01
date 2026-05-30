@@ -35,7 +35,10 @@
   <div class="divider"><span>오늘의 추천곡을 추가해보세요</span></div>
   <div id="picks"></div>
   <div id="users-wrap">
-    <div class="divider"><span>친구들</span></div>
+    <div class="divider" onclick="toggleUsers()" style="cursor:pointer">
+      <span>친구들</span>
+      <span id="users-toggle" style="font-size:12px;color:var(--s);margin-left:8px">›</span>
+    </div>
     <div id="user-cards"></div>
   </div>
   <div id="discover-wrap" style="display:none">

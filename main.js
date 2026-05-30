@@ -250,8 +250,18 @@ function renderDiscover() {
       </div></div>`}).join('')
 }
 
+let usersOpen = localStorage.getItem('mt_users_open') !== 'false'
+function toggleUsers() {
+  usersOpen = !usersOpen
+  localStorage.setItem('mt_users_open', usersOpen)
+  document.getElementById('user-cards').style.display = usersOpen ? 'block' : 'none'
+  document.getElementById('users-toggle').textContent = usersOpen ? '∨' : '›'
+}
+
 function renderUsers() {
   const others = db.users.filter(u => !u.isAdmin)
+  document.getElementById('user-cards').style.display = usersOpen ? 'block' : 'none'
+  document.getElementById('users-toggle').textContent = usersOpen ? '∨' : '›'
   document.getElementById('user-cards').innerHTML = others.map(u => {
     const lib = db.lib[u.id] || {tracks:[]}
     return `<div onclick="viewProfile('${u.id}')" style="display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--card);border:1px solid var(--b);border-radius:14px;cursor:pointer;margin-bottom:8px;transition:border-color .15s" onmouseover="this.style.borderColor='var(--bs)'" onmouseout="this.style.borderColor='var(--b)'">
