@@ -151,15 +151,6 @@ function clearMyPick() {
   sync(); renderPicks()
 }
 
-function expirePicks() {
-  let changed = false
-  db.users.forEach(u => {
-    if (u.todayPick?.pickedAt && Date.now() - u.todayPick.pickedAt > 86400000) {
-      u.todayPick = null; changed = true
-    }
-  })
-  if (changed) sync()
-}
 
 function addTo(folderId) {
   if (!db.lib[uid]) db.lib[uid] = {folders:[], tracks:[]}
@@ -380,7 +371,7 @@ async function pullRemote() {
   if (!r) return
   const before = r.users?.length || 0
   db = mergeDb(db, r, uid)
-  expirePicks()
+
   if (before < db.users.length) sync(); else save()
   renderAll(); renderHeader()
 }
@@ -392,7 +383,7 @@ async function pullRemote() {
     db = mergeDb(db, remote, uid)
     if (before < db.users.length) sync(); else save()
   }
-  expirePicks()
+
   await initAdmin()
   if (uid && !db.users.find(u => u.id===uid)) { uid=null; saveUid() }
   applyTheme(curPal)
