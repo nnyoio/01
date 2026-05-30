@@ -365,16 +365,24 @@ function deleteUser() {
 }
 
 ;(async () => {
-  const remote = await remoteGet()
-  if (remote) { db = mergeDb(db, remote, uid); save() }
+  document.getElementById('page').innerHTML = `<p style="text-align:center;color:var(--s);padding:40px 0;font-size:13px">불러오는 중...</p>`
   const params = new URLSearchParams(location.search)
   targetId = params.get('id') || uid
   if (!targetId) { location.href = 'index.html'; return }
+
+  const remote = await remoteGet()
+  if (remote) { db = mergeDb(db, remote, uid); save() }
+
   target = db.users.find(u => u.id === targetId)
-  if (!target) { location.href = 'index.html'; return }
+  if (!target) {
+    document.getElementById('page').innerHTML = `<p style="text-align:center;color:var(--s);padding:40px 0;font-size:13px">유저를 찾을 수 없어</p>`
+    applyTheme(curPal); renderSwatches(); renderHeader(); return
+  }
   pendingColor = target.color || COLORS[0]
   applyTheme(curPal)
   renderSwatches()
   renderHeader()
-  renderPage()
+  try { renderPage() } catch(e) {
+    document.getElementById('page').innerHTML = `<p style="text-align:center;color:var(--s);padding:40px 0;font-size:13px">오류가 발생했어</p>`
+  }
 })()
