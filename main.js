@@ -32,7 +32,6 @@ function renderSwatches() {
     `<button id="darkbtn" onclick="toggleDark()">${document.body.classList.contains('dark')?ICON_SUN:ICON_MOON}</button>`
 }
 
-// ── 보안 (PBKDF2 + 유저별 랜덤 솔트) ────────────────
 function genSalt() {
   return Array.from(crypto.getRandomValues(new Uint8Array(16)))
     .map(b => b.toString(16).padStart(2, '0')).join('')
@@ -53,7 +52,6 @@ async function hashPin(pin, salt) {
   return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
-// ── 상태 ──────────────────────────────────────────────
 const COLORS = [
   '#C4856A','#CA7C4C','#D39858','#BB8588','#B97D7B',
   '#8B1C22','#7F0303','#FF819C','#B37AD4','#8BA3C5',
@@ -97,24 +95,17 @@ function toast(msg) {
   document.body.appendChild(el); setTimeout(() => el.remove(), 2200)
 }
 
-// ── 관리자 계정 초기화 ─────────────────────────────────
 async function initAdmin() {
   const old = db.users.find(u => u.id === 'admin')
   if (old && !old.salt) db.users = db.users.filter(u => u.id !== 'admin')
   if (db.users.some(u => u.id === 'admin')) return
   const salt = genSalt()
   const pin  = await hashPin('jesus1219!!', salt)
-  const admin = {
-    id:'admin', name:'관리자', pin, salt,
-    bio:'MixTune 관리자', insta:'', artist:'', song:'', playlist:'',
-    color:'#8B1C22', todayPick:null, isAdmin:true
-  }
-  db.users.unshift(admin)
+  db.users.unshift({id:'admin', name:'관리자', pin, salt, bio:'MixTune 관리자', insta:'', artist:'', song:'', playlist:'', color:'#8B1C22', todayPick:null, isAdmin:true})
   db.lib['admin'] = db.lib['admin'] || {folders:[], tracks:[]}
   sync()
 }
 
-// ── 검색 ──────────────────────────────────────────────
 let timer = null
 const qEl = document.getElementById('q'), res = document.getElementById('results')
 qEl.addEventListener('input', () => { clearTimeout(timer); const q=qEl.value.trim(); if(!q){res.style.display='none';return}; timer=setTimeout(()=>search(q),350) })
@@ -182,7 +173,6 @@ function removeTrack(trackId, folderId) {
   db.lib[uid].tracks = db.lib[uid].tracks.filter(t => !(t.trackId===trackId && t.folderId===folderId)); sync(); renderLib()
 }
 
-// ── 렌더 ──────────────────────────────────────────────
 function renderPicks() {
   const picks = db.users.filter(u => u.todayPick)
   document.getElementById('picks').innerHTML = picks.length ? picks.map(u => {
@@ -212,10 +202,11 @@ function renderLib() {
       ${f.name}${fid===f.id&&f.id!=='all'?` <span onclick="event.stopPropagation();delFolder('${f.id}')" style="margin-left:3px;opacity:.7">×</span>`:''}
     </button>`).join('')
   const filtered = fid==='all' ? lib.tracks : lib.tracks.filter(t => t.folderId===fid)
-  document.getElementById('feed').innerHTML = filtered.length ? filtered.map(t => `
-    <div class="card fade-in">
+  document.getElementById('feed').innerHTML = filtered.length ? filtered.map(t => {
+    const art = bigArt(t.artworkUrl100)
+    return `<div class="card fade-in">
       <div class="top">
-        ${bigArt(t.artworkUrl100)?`<img src="${bigArt(t.artworkUrl100)}">`:''}
+        ${art?`<img src="${art}">`:''}
         <div class="info">
           <div><div class="tn">${t.trackName}</div><div class="an">${t.artistName}</div></div>
           <div class="bot">
@@ -225,7 +216,7 @@ function renderLib() {
           </div>
         </div>
       </div>
-    </div>`).join('') : `<p class="empty">검색해서 곡을 추가해봐</p>`
+    </div>`}).join('') : `<p class="empty">검색해서 곡을 추가해봐</p>`
 }
 
 function setFid(id) { fid = id; renderLib() }
@@ -249,7 +240,6 @@ function renderHeader() {
 
 function viewProfile(userId) { location.href = `profile.html?id=${userId}` }
 
-// ── 로그인 ────────────────────────────────────────────
 function showLogin() {
   const body = document.getElementById('login-body'), title = document.getElementById('login-title')
   show('ov-login')
@@ -311,9 +301,8 @@ async function addUser() {
   document.getElementById('un').value=''; document.getElementById('up').value=''; hide('ov-user'); renderPicks()
 }
 
-function doLogout() { uid=null; saveUid(); renderHeader(); renderLib() }
+function doLogout() { uid=null; saveUid(); renderHeader(); renderAll() }
 
-// ── 폴더 ──────────────────────────────────────────────
 function openFolder() { show('ov-folder'); document.getElementById('fn').value=''; setTimeout(()=>document.getElementById('fn').focus(),50) }
 function mkFolder() {
   const name = document.getElementById('fn').value.trim(); if (!name||!uid) return
@@ -322,7 +311,6 @@ function mkFolder() {
 }
 document.getElementById('fn').addEventListener('keydown', e => e.key==='Enter' && mkFolder())
 
-// ── 초기화 ────────────────────────────────────────────
 ;(async () => {
   const remote = await remoteGet()
   if (remote) { db = mergeDb(db, remote, uid); save() }
