@@ -29,7 +29,7 @@ function renderSwatches() {
   document.getElementById('swatches').innerHTML =
     PAL.map(p=>`<div class="sw${p.id===curPal?' on':''}" data-k="${p.id}" style="background:${p.s}" onclick="applyTheme('${p.id}')"></div>`).join('') +
     `<button id="shuffle" onclick="shuffleTheme()" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--b);color:var(--s);font-size:13px;display:flex;align-items:center;justify-content:center;transition:transform .4s ease;margin-left:3px">↻</button>` +
-    `<button id="darkbtn" onclick="toggleDark()">${document.body.classList.contains('dark')?'☀':'🌙'}</button>`
+    `<button id="darkbtn" onclick="toggleDark()">${document.body.classList.contains('dark')?ICON_SUN:ICON_MOON}</button>`
 }
 
 function genSalt() {
