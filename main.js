@@ -229,7 +229,7 @@ function delFolder(id) {
 function renderDiscover() {
   const tracks = []
   db.users.forEach(u => {
-    if (!u.libPublic || u.id === uid) return
+    if (!u.libPublic) return
     const lib = db.lib[u.id] || {tracks:[]}
     lib.tracks.forEach(t => tracks.push({...t, _name:u.name, _color:u.color, _id:u.id}))
   })
