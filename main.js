@@ -281,13 +281,18 @@ function renderAll() { renderPicks(); renderDiscover(); renderLib(); applySectio
 
 function renderHeader() {
   const u = me(), el = document.getElementById('hdr-right')
+  const pill = 'border:1px solid var(--b);padding:3px 11px;border-radius:999px;font-size:12px;color:var(--s)'
   el.innerHTML = u
-    ? `<button onclick="location.href='profile.html?id=${u.id}'" style="display:flex;align-items:center;gap:6px;color:var(--t);font-size:13px"><span style="width:8px;height:8px;border-radius:50%;background:${u.color};display:inline-block;flex-shrink:0"></span>${u.name}</button>
-       <button onclick="location.href='friends.html'" style="color:var(--s)">친구들</button>
-       ${u.isAdmin ? `<button onclick="location.href='admin.html'" style="color:var(--a)">관리자</button>` : ''}
-       ${!u.isAdmin ? `<button onclick="openFeedback()" style="color:var(--s);border:1px solid var(--b);padding:3px 12px;border-radius:999px">후기!</button>` : ''}
-       <button onclick="openAddUser()" style="border:1px solid var(--b);padding:3px 10px;border-radius:8px;color:var(--s)">+ 사용자</button>
-       <button onclick="doLogout()">로그아웃</button>`
+    ? `<button onclick="location.href='profile.html?id=${u.id}'"
+         style="${pill};color:var(--t);display:flex;align-items:center;gap:5px">
+         <span style="width:7px;height:7px;border-radius:50%;background:${u.color};flex-shrink:0;display:inline-block"></span>
+         <span style="max-width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${u.name}</span>
+       </button>
+       <button onclick="location.href='friends.html'" style="${pill}">친구들</button>
+       ${u.isAdmin ? `<button onclick="location.href='admin.html'" style="${pill};color:var(--a);border-color:var(--a)">관리자</button>` : ''}
+       ${!u.isAdmin ? `<button onclick="openFeedback()" style="${pill}">후기!</button>` : ''}
+       ${u.isAdmin ? `<button onclick="openAddUser()" style="${pill}">+ 사용자</button>` : ''}
+       <button onclick="doLogout()" style="${pill}">로그아웃</button>`
     : `<button class="login-btn" onclick="showLogin()">로그인</button>`
 }
 
