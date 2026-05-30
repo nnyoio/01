@@ -60,8 +60,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:50;height:52px;display:flex;a
 #hdr-right button{color:var(--s)}
 #hdr-right .login-btn{border:1px solid var(--bs);padding:4px 12px;border-radius:999px;color:var(--a)}
 
-.grain::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");pointer-events:none;z-index:1}
-#hero{position:relative;overflow:hidden;padding-top:52px;min-height:50vh;background:var(--card)}
+.grain::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");pointer-events:none;z-index:1;overflow:hidden}
+#hero{position:relative;overflow:visible;padding-top:52px;min-height:50vh;background:var(--card);z-index:10}
 #hero .grad{position:absolute;inset:0;background:linear-gradient(135deg,var(--card),var(--warm) 50%,var(--card))}
 #hero .inner{position:relative;z-index:2;max-width:640px;margin:0 auto;padding:56px 20px;text-align:center}
 h1{font-size:clamp(2.2rem,7vw,3.5rem);color:var(--t);line-height:1.2;margin-bottom:16px}
@@ -71,7 +71,7 @@ h1 span{color:var(--a)}
 #search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--s)}
 #q{width:100%;padding:13px 16px 13px 42px;border-radius:16px;font-size:13px;outline:none;background:var(--bg);border:1px solid var(--bs);color:var(--t)}
 #q::placeholder{color:var(--s);opacity:.6}
-#results{display:none;position:absolute;bottom:calc(100% + 6px);top:auto;left:0;right:0;background:var(--bg);border:1px solid var(--bs);border-radius:14px;overflow-y:auto;max-height:300px;box-shadow:0 8px 28px rgba(0,0,0,.18);z-index:50}
+#results{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg);border:1px solid var(--bs);border-radius:14px;overflow-y:auto;max-height:300px;box-shadow:0 8px 28px rgba(0,0,0,.18);z-index:100}
 .ri{display:flex;align-items:center;gap:11px;padding:9px 13px;cursor:pointer;transition:background .12s}
 .ri:hover{background:var(--card)}
 .ri:not(:last-child){border-bottom:1px solid var(--b)}
