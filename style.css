@@ -168,3 +168,38 @@ main{max-width:860px;margin:0 auto;padding:44px 16px}
 .fade-in{animation:fi .35s ease forwards}
 @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--a);color:var(--at);padding:9px 18px;border-radius:999px;font-size:13px;z-index:999;pointer-events:none;white-space:nowrap}
+
+@media(max-width:620px){
+  header{height:auto;flex-wrap:wrap;padding:10px 14px 0;gap:0;align-items:center}
+  #logo{font-size:16px}
+  #logo svg{width:15px;height:15px}
+  #swatches{order:3;flex:none;width:100%;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;padding:8px 0 6px;gap:5px}
+  #swatches::-webkit-scrollbar{display:none}
+  .sw{width:17px;height:17px;flex-shrink:0}
+  #shuffle,#darkbtn{flex-shrink:0}
+  #hdr-right{gap:6px;font-size:11px}
+  #hdr-right button{font-size:11px}
+
+  #hero{padding-top:90px}
+  #hero .inner{padding:36px 14px 28px}
+  #hero p{font-size:13px;margin-bottom:28px}
+
+  main{padding:28px 12px}
+  #picks{grid-template-columns:repeat(2,1fr);gap:10px}
+  .pick-card .pi{padding:10px}
+  .pick-card audio{margin-top:6px}
+  .card .top img{width:70px;height:70px}
+
+  .page-wrap{padding:90px 14px 40px}
+  .p-stats{gap:7px}
+  .p-stat{padding:11px 6px}
+
+  .modal{width:calc(100vw - 28px)}
+  .admin-stats{gap:7px}
+  .admin-stat{padding:11px 6px}
+}
+
+@media(max-width:400px){
+  #picks{grid-template-columns:1fr}
+  .p-stats{grid-template-columns:repeat(3,1fr);gap:5px}
+}
