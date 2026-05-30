@@ -264,7 +264,7 @@ function renderUsers() {
   document.getElementById('users-toggle').textContent = usersOpen ? '∨' : '›'
   document.getElementById('user-cards').innerHTML = others.map(u => {
     const lib = db.lib[u.id] || {tracks:[]}
-    return `<div onclick="viewProfile('${u.id}')" style="display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--card);border:1px solid var(--b);border-radius:14px;cursor:pointer;margin-bottom:8px;transition:border-color .15s" onmouseover="this.style.borderColor='var(--bs)'" onmouseout="this.style.borderColor='var(--b)'">
+    return `<div onclick="viewProfile('${u.id}')" style="display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--card);border:1px solid var(--b);border-radius:14px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='var(--bs)'" onmouseout="this.style.borderColor='var(--b)'">
       <div style="width:40px;height:40px;border-radius:50%;background:${u.color};display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;flex-shrink:0">${u.name[0]}</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:14px;font-weight:500;color:var(--t)">${u.name}</div>
