@@ -152,11 +152,11 @@ function viewMode(u, isMine, isAdmin, safeUrl, instaHandle, instaUrl) {
       </div>` : ''}
       ${safeUrl ? `<a href="${safeUrl}" target="_blank" class="plink">▶ 플리 보기</a>` : ''}
     </div>
-    ${(isMine || u.libPublic) && lib.tracks.length > 0 ? `
+    ${(isMine || u.libPublic !== false) && lib.tracks.length > 0 ? `
     <div class="p-card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <span style="font-size:13px;font-weight:500;color:var(--t)">라이브러리</span>
-        ${isMine && !u.libPublic ? `<span style="font-size:11px;color:var(--s);opacity:.55">🔒 나만 보임</span>` : ''}
+        ${isMine && u.libPublic===false ? `<span style="font-size:11px;color:var(--s);opacity:.55">🔒 나만 보임</span>` : ''}
       </div>
       ${lib.tracks.slice(0,30).map(t => `
         <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--b)">

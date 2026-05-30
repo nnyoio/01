@@ -58,7 +58,7 @@ function renderPage() {
       <div style="width:44px;height:44px;border-radius:50%;background:${u.color};display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0">${u.name[0]}</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:14px;font-weight:500;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(u.name)}</div>
-        <div style="font-size:11px;color:var(--s);margin-top:3px">${lib.tracks.length}트랙${u.todayPick?' · ✦':''}${u.libPublic!==false?' · 🔓':' · 🔒'}</div>
+        <div style="font-size:11px;color:var(--s);margin-top:3px">${lib.tracks.length}트랙${u.todayPick?' · ✦':''}${u.libPublic===false?' · 🔒':' · 🔓'}</div>
       </div>
       <span style="font-size:18px;color:var(--s);opacity:.35">›</span>
     </div>`
