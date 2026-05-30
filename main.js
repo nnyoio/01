@@ -118,7 +118,8 @@ qEl.addEventListener('input', () => { clearTimeout(timer); const q=qEl.value.tri
 qEl.addEventListener('blur',  () => setTimeout(() => res.style.display='none', 160))
 qEl.addEventListener('focus', () => { if(res.innerHTML){ posRes(); res.style.display='block' } })
 qEl.addEventListener('keydown', e => e.key==='Escape' && (res.style.display='none'))
-window.addEventListener('scroll', () => res.style.display='none', {passive:true})
+window.addEventListener('scroll',    () => res.style.display='none', {passive:true})
+window.addEventListener('touchmove', () => res.style.display='none', {passive:true})
 
 async function search(q) {
   const data = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=8&country=KR`).then(r=>r.json())
