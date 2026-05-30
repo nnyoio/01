@@ -186,7 +186,7 @@ main{max-width:860px;margin:0 auto;padding:44px 16px}
   #hero p{font-size:13px;margin-bottom:28px}
 
   main{padding:28px 12px}
-  #picks,#discover{grid-template-columns:1fr;gap:8px}
+  #picks,#discover{grid-template-columns:1fr!important;gap:8px}
   .pick-card{display:flex;flex-direction:row;align-items:stretch}
   .pick-card img{width:86px;height:86px;flex-shrink:0;object-fit:cover;aspect-ratio:unset}
   .pick-card .pi{padding:10px 12px;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px}

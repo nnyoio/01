@@ -249,7 +249,7 @@ function renderDiscover() {
   const wrap = document.getElementById('discover-wrap')
   if (!tracks.length) { wrap.style.display='none'; return }
   wrap.style.display = 'block'
-  const picked = tracks.sort(()=>Math.random()-.5).slice(0,12)
+  const picked = tracks.sort(()=>Math.random()-.5).slice(0,4)
   setDiscoverGrid(discoverGrid)
   document.getElementById('discover').innerHTML = picked.map(t => {
     const img = bigArt(t.artworkUrl100)
