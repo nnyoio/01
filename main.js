@@ -148,8 +148,24 @@ function pickTrack(id) {
 
 function setTodayPick() {
   const i = db.users.findIndex(u => u.id===uid)
-  db.users[i].todayPick = db.users[i].todayPick?.trackId===pending.trackId ? null : pending
+  db.users[i].todayPick = db.users[i].todayPick?.trackId===pending.trackId ? null : {...pending, pickedAt:Date.now()}
   sync(); hide('ov-track'); renderPicks(); qEl.value = ''
+}
+
+function clearMyPick() {
+  const i = db.users.findIndex(u => u.id===uid); if (i < 0) return
+  db.users[i].todayPick = null
+  sync(); renderPicks()
+}
+
+function expirePicks() {
+  let changed = false
+  db.users.forEach(u => {
+    if (u.todayPick?.pickedAt && Date.now() - u.todayPick.pickedAt > 86400000) {
+      u.todayPick = null; changed = true
+    }
+  })
+  if (changed) sync()
 }
 
 function addTo(folderId) {
@@ -172,7 +188,10 @@ function renderPicks() {
     return `<div class="pick-card fade-in">
       ${img?`<img src="${img}">`:''}
       <div class="pi">
-        <button class="who" onclick="viewProfile('${u.id}')" style="width:100%;text-align:left"><span style="background:${u.color}"></span>${u.name}의 추천</button>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="who" onclick="viewProfile('${u.id}')" style="flex:1;text-align:left"><span style="background:${u.color}"></span>${u.name}의 추천</button>
+          ${u.id===uid?`<button onclick="clearMyPick()" style="font-size:11px;color:var(--s);opacity:.6;background:none;border:none;cursor:pointer;padding:2px 4px">내리기</button>`:''}
+        </div>
         ${u.bio?`<div style="font-size:11px;color:var(--s);margin-top:2px;margin-bottom:6px;opacity:.8;line-height:1.4">${u.bio}</div>`:''}
         <div style="font-size:14px;font-weight:500;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.trackName}</div>
         <div style="font-size:11px;color:var(--s);margin-top:2px">${t.artistName}</div>
@@ -305,6 +324,7 @@ document.getElementById('fn').addEventListener('keydown', e => e.key==='Enter' &
 ;(async () => {
   const remote = await remoteGet()
   if (remote) { db = mergeDb(db, remote, uid); save() }
+  expirePicks()
   await initAdmin()
   if (uid && !db.users.find(u => u.id===uid)) { uid=null; saveUid() }
   applyTheme(curPal)
@@ -317,6 +337,7 @@ document.getElementById('fn').addEventListener('keydown', e => e.key==='Enter' &
     if (!r) return
     db = mergeDb(db, r, uid)
     save()
+    expirePicks()
     renderAll(); renderHeader()
   }, 30000)
 })()
